@@ -29,7 +29,7 @@ public class CoronaVirusDataService {
     }
 
     @PostConstruct // a method that needs to be executed after dependency injection
-    @Scheduled(cron = "* * 1 * * *") // second min. hours days mounths years
+    @Scheduled(cron = "* * 1 * * *") // second min. hours days months years
     public void fetchVirusData() throws IOException, InterruptedException {
         List<LocationStats> newStats = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
@@ -45,7 +45,7 @@ public class CoronaVirusDataService {
         for (CSVRecord record : records) {
             LocationStats locationStats = new LocationStats();
             locationStats.setState(record.get("Province/State"));
-            locationStats.setCountry("Country/Region");
+            locationStats.setCountry(record.get("Country/Region"));
             int latestCases = Integer.parseInt(record.get(record.size() - 1));
             int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
             locationStats.setLatestTotalCases(latestCases);
